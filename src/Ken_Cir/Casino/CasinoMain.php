@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Ken_Cir\Casino;
 
+use Ken_Cir\Casino\Database\Slot\SlotDataManager;
+use Ken_Cir\Casino\Database\SlotConfig\SlotConfigDataManager;
 use Ken_Cir\EconomyCore\EconomyCore;
 use pocketmine\plugin\PluginBase;
 use pocketmine\utils\Config;
@@ -20,6 +22,10 @@ class CasinoMain extends PluginBase
     const VERSION = "1.0.0";
 
     private DataConnector $dataConnector;
+
+    private SlotConfigDataManager $slotConfigDataManager;
+
+    private SlotDataManager $slotDataManager;
 
     protected function onLoad(): void
     {
@@ -57,7 +63,11 @@ class CasinoMain extends PluginBase
             "sqlite" => "sqlite.sql"
         ]);
         $this->dataConnector->executeGeneric("economy.casino.slot_configs.init");
+        $this->dataConnector->executeGeneric("economy.casino.slots.init");
         $this->dataConnector->waitAll();
+
+        $this->slotConfigDataManager = new SlotConfigDataManager($this->dataConnector);
+        $this->slotDataManager = new SlotDataManager($this->dataConnector);
     }
 
     protected function onDisable(): void
@@ -72,5 +82,21 @@ class CasinoMain extends PluginBase
     public function getDataConnector(): DataConnector
     {
         return $this->dataConnector;
+    }
+
+    /**
+     * @return SlotConfigDataManager
+     */
+    public function getSlotConfigDataManager(): SlotConfigDataManager
+    {
+        return $this->slotConfigDataManager;
+    }
+
+    /**
+     * @return SlotDataManager
+     */
+    public function getSlotDataManager(): SlotDataManager
+    {
+        return $this->slotDataManager;
     }
 }

@@ -19,6 +19,12 @@ INSERT INTO slot_configs (jp)
 VALUES (:jp);
 -- # }
 
+-- # { seq
+SELECT seq
+FROM sqlite_sequence
+WHERE name = "slot_configs";
+-- # }
+
 -- # { load
 SELECT *
 FROM slot_configs;
