@@ -1,0 +1,8 @@
+name: EconomyCasino
+description: カジノプラグイン
+version: 1.0.0
+api: 4.0.0
+main: Ken_Cir\Casino\CasinoMain
+
+loadbefore:
+  - EconomyCore

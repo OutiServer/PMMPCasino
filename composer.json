@@ -1,0 +1,13 @@
+{
+  "name": "ken_cir/casino",
+  "description": "PMMPカジノ",
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "": "src/"
+    }
+  },
+  "require-dev": {
+    "pocketmine/pocketmine-mp": "4.3.1"
+  }
+}

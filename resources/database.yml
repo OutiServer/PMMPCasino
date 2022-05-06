@@ -1,0 +1,5 @@
+database:
+  type: sqlite
+  sqlite:
+    file: casino.db
+  worker-limit: 1
