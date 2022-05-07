@@ -29,7 +29,13 @@ class SlotConfigData extends BaseData
 
     protected function update(): void
     {
-        $this->dataConnector->executeChange("");
+        $this->dataConnector->executeChange("economy.casino.slot_configs.update",
+            [
+                "jp" => $this->jp,
+                "latest_jp_player_xuid" => $this->latestJPPlayerXuid,
+                "latest_jp" => $this->latestJP,
+                "id" => $this->id
+            ]);
     }
 
     /**
@@ -54,6 +60,7 @@ class SlotConfigData extends BaseData
     public function setJp(int $jp): void
     {
         $this->jp = $jp;
+        $this->update();
     }
 
     /**
@@ -70,6 +77,7 @@ class SlotConfigData extends BaseData
     public function setLatestJPPlayerXuid(string $latestJPPlayerXuid): void
     {
         $this->latestJPPlayerXuid = $latestJPPlayerXuid;
+        $this->update();
     }
 
     /**
@@ -86,5 +94,6 @@ class SlotConfigData extends BaseData
     public function setLatestJP(int $latestJP): void
     {
         $this->latestJP = $latestJP;
+        $this->update();
     }
 }

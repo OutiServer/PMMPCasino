@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Ken_Cir\Casino\Database\SlotConfig;
 
+use Ken_Cir\EconomyCore\Database\Base\BaseAutoincrement;
 use Ken_Cir\EconomyCore\Database\Base\BaseDataManager;
 use pocketmine\utils\SingletonTrait;
 use poggit\libasynql\DataConnector;
@@ -11,8 +12,7 @@ use poggit\libasynql\DataConnector;
 class SlotConfigDataManager extends BaseDataManager
 {
     use SingletonTrait;
-
-    private int $seq;
+    use BaseAutoincrement;
 
     public function __construct(DataConnector $dataConnector)
     {
@@ -61,7 +61,7 @@ class SlotConfigDataManager extends BaseDataManager
         if ($this->get($id) === null) return;
 
         $this->dataConnector->executeGeneric(
-            "economy.casino.slots..delete",
+            "economy.casino.slots.delete",
             [
                 "id" => $id
             ]);
