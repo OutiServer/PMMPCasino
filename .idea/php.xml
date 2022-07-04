@@ -15,7 +15,6 @@
       <path value="$PROJECT_DIR$/vendor/fgrosse/phpasn1" />
       <path value="$PROJECT_DIR$/vendor/netresearch/jsonmapper" />
       <path value="$PROJECT_DIR$/vendor/symfony/polyfill-php81" />
-      <path value="$PROJECT_DIR$/vendor/symfony/polyfill-ctype" />
       <path value="$PROJECT_DIR$/vendor/pocketmine/snooze" />
       <path value="$PROJECT_DIR$/vendor/pocketmine/bedrock-data" />
       <path value="$PROJECT_DIR$/vendor/pocketmine/color" />

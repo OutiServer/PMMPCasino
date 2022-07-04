@@ -19,7 +19,6 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/fgrosse/phpasn1" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/netresearch/jsonmapper" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/polyfill-php81" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/polyfill-ctype" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/pocketmine/snooze" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/pocketmine/bedrock-data" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/pocketmine/color" />
