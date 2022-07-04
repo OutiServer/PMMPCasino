@@ -1,2 +1,4 @@
+version: 1.0.0
+
 # ジャックポットの初期額
 default_slot_jp: 10000

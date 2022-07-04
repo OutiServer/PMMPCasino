@@ -7,6 +7,7 @@
 CREATE TABLE IF NOT EXISTS slot_configs
 (
     id                    INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL ,
     jp                    INTEGER NOT NULL,
     latest_jp_player_xuid TEXT    NOT NULL DEFAULT 'なし',
     latest_jp             INTEGER NOT NULL DEFAULT 0
@@ -14,9 +15,10 @@ CREATE TABLE IF NOT EXISTS slot_configs
 -- # }
 
 -- # { create
+-- #    :name string
 -- #    :jp int
-INSERT INTO slot_configs (jp)
-VALUES (:jp);
+INSERT INTO slot_configs (name, jp)
+VALUES (:name, :jp);
 -- # }
 
 -- # { seq
@@ -31,12 +33,14 @@ FROM slot_configs;
 -- # }
 
 -- # { update
+-- #    :name string
 -- #    :jp int
 -- #    :latest_jp_player_xuid string
 -- #    :latest_jp int
 -- #    :id int
 UPDATE slot_configs
-SET jp                    = :jp,
+SET name = :name,
+    jp                    = :jp,
     latest_jp_player_xuid = :latest_jp_player_xuid,
     latest_jp             = :latest_jp
 WHERE id = :id;
@@ -59,18 +63,19 @@ DROP TABLE IF EXISTS slot_configs;
 CREATE TABLE IF NOT EXISTS slots
 (
     id         INTEGER PRIMARY KEY AUTOINCREMENT,
+    type       INTEGER NOT NULL,
     parent_id  INTEGER NOT NULL,
     name       TEXT    NOT NULL,
     world_name TEXT    NOT NULL,
     x          INTEGER NOT NULL,
     y          INTEGER NOT NULL,
     z          INTEGER NOT NULL,
-    bet        INTEGER NOT NULL,
-    sideline   INTEGER NOT NULL
+    bet        INTEGER NOT NULL
 );
 -- # }
 
 -- # { create
+-- #    :type int
 -- #    :parent_id int
 -- #    :name string
 -- #    :world_name string
@@ -78,9 +83,14 @@ CREATE TABLE IF NOT EXISTS slots
 -- #    :y int
 -- #    :z int
 -- #    :bet int
--- #    :sideline int
-INSERT INTO slots (parent_id, name, world_name, x, y, z, bet, sideline)
-VALUES (:parent_id, :name, :world_name, :x, :y, :z, :bet, :sideline);
+INSERT INTO slots (type, parent_id, name, world_name, x, y, z, bet)
+VALUES (:type, :parent_id, :name, :world_name, :x, :y, :z, :bet);
+-- # }
+
+-- # { seq
+SELECT seq
+FROM sqlite_sequence
+WHERE name = "slots";
 -- # }
 
 -- # { load
@@ -89,24 +99,16 @@ FROM slots;
 -- # }
 
 -- # { update
+-- #    :type int
 -- #    :parent_id int
 -- #    :name string
--- #    :world_name string
--- #    :x int
--- #    :y int
--- #    :z int
 -- #    :bet int
--- #    :sideline int
 -- #    :id int
 UPDATE slots
-SET parent_id  = :parent_id,
+SET type       = :type,
+    parent_id  = :parent_id,
     name       = :name,
-    world_name = :world_name,
-    x          = :x,
-    y          = :y,
-    z          = :z,
-    bet        = :bet,
-    sideline   = :sideline
+    bet        = :bet
 WHERE id = :id;
 -- # }
 

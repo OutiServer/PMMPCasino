@@ -6,3 +6,11 @@ main: Ken_Cir\Casino\CasinoMain
 
 loadbefore:
   - EconomyCore
+
+permissions:
+  casino.command:
+    description: Casino Command Permission
+    default: true
+  casino.createslotmanager.command:
+    description: CreateSlotManager Command Permission
+    default: op
