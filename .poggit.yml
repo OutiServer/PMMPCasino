@@ -1,4 +1,4 @@
---- # Poggit-CI Manifest. Open the CI at https://poggit.pmmp.io/ci/KenCir/PMMPCasino
+--- # Poggit-CI Manifest. Open the CI at https://poggit.pmmp.io/ci/OutiServer/PMMPCasino
 build-by-default: true
 branches:
 - master
@@ -7,5 +7,5 @@ projects:
     path: ""
     libs:
       - src: poggit/libasynql/libasynql
-        version: ^4.0.1
+        version: ^4.1.0
 ...
