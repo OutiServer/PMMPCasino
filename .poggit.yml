@@ -1,9 +1,9 @@
---- # Poggit-CI Manifest. Open the CI at https://poggit.pmmp.io/ci/OutiServer/PMMPCasino
+--- # Poggit-CI Manifest. Open the CI at https://poggit.pmmp.io/ci/OutiServer/Casino
 build-by-default: true
 branches:
 - master
 projects:
-  PMMPCasino:
+  Casino:
     path: ""
     lint:
       phpstan: false
