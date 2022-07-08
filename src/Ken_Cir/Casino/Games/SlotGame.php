@@ -31,6 +31,8 @@ class SlotGame extends BaseGame
 
     public function run(): void
     {
+        parent::run();
+
         switch ($this->slotData->getType()) {
             case 0:
                 $this->runSlot();
@@ -128,9 +130,9 @@ class SlotGame extends BaseGame
         }
 
         $this->player->sendTitle($slotTitle);
-        if ($this->runCount <= 2) {
+        if ($this->runCount <= 3) {
             $this->plugin->getScheduler()->scheduleDelayedTask(new ClosureTask(function (): void {
-                call_user_func_array([$this, ["runSlot"]], []);
+                call_user_func_array([$this, "runSlot"], []);
             }), 30);
         }
         else {
@@ -140,6 +142,8 @@ class SlotGame extends BaseGame
 
     public function complete(): void
     {
+        parent::complete();
+
         $this->player->sendMessage("処理終了");
     }
 }

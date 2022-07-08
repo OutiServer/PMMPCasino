@@ -2,12 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Ken_Cir\Casino\Handlers;
+namespace Ken_Cir\Casino;
 
-use Ken_Cir\Casino\CasinoMain;
+use Ken_Cir\Casino\Forms\CreateSlotForm;
 use Ken_Cir\Casino\Games\SlotGame;
-use Ken_Cir\LibFormAPI\FormContents\CustomForm\ContentDropdown;
-use Ken_Cir\LibFormAPI\Forms\CustomForm;
 use pocketmine\event\block\SignChangeEvent;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerInteractEvent;
@@ -52,9 +50,12 @@ class EventHandler implements Listener
     public function onSignChange(SignChangeEvent $event): void
     {
         $player = $event->getPlayer();
+        $block = $event->getBlock();
         $signText = $event->getNewText();
+        $sign = $event->getSign();
 
         if ($signText->getLine(0) === "slot") {
+            (new CreateSlotForm($block->getPosition()->getWorld()->getFolderName(), $block->getPosition()->getFloorX(), $block->getPosition()->getFloorY(), $block->getPosition()->getFloorZ(), $sign))->execute($player);
         }
     }
 }

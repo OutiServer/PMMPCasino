@@ -86,6 +86,7 @@ class CasinoMain extends PluginBase
         }
 
         $this->getServer()->getCommandMap()->register($this->getName(), new CasinoCommand($this, "casino", "カジノコマンド", []));
+        $this->getServer()->getPluginManager()->registerEvents(new EventHandler($this), $this);
     }
 
     protected function onDisable(): void

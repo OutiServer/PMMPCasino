@@ -53,7 +53,7 @@ class SlotConfigDataManager extends BaseDataManager
             return $slotConfigData->getName() === $name;
         });
 
-        if (!count($result) < 1) return null;
+        if (count($result) < 1) return null;
         return current($result);
     }
 
@@ -61,7 +61,8 @@ class SlotConfigDataManager extends BaseDataManager
     {
         $this->dataConnector->executeInsert("economy.casino.slot_configs.create",
             [
-                "jp" => $defaultJP
+                "jp" => $defaultJP,
+                "name" => $name
             ]);
 
         return ($this->data[++$this->seq] = new SlotConfigData($this->dataConnector, $this->seq, $name, $defaultJP, "なし", 0));

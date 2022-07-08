@@ -24,6 +24,9 @@ class CasinoCommand extends BaseCommand
             if ($subCommand->testPermissionSilent($sender)) {
                 $sender->sendMessage(TextFormat::GREEN . $subCommand->getUsageMessage());
             }
+            else {
+                $sender->sendMessage(TextFormat::RED . $subCommand->getUsageMessage());
+            }
         }
     }
 }

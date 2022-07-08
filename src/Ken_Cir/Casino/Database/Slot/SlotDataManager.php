@@ -60,7 +60,7 @@ class SlotDataManager extends BaseDataManager
 
     public function create(int $type, int $parentId, string $name, string $worldName, int $x, int $y, int $z, int $bet): SlotData
     {
-        $this->dataConnector->executeInsert("economy.casino.slot_configs.create",
+        $this->dataConnector->executeInsert("economy.casino.slots.create",
             [
                 "type" => $type,
                 "parent_id" => $parentId,

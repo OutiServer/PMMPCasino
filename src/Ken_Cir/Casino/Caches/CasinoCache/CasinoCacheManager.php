@@ -8,6 +8,11 @@ use Ken_Cir\EconomyCore\Caches\Base\BaseCacheManager;
 
 class CasinoCacheManager extends BaseCacheManager
 {
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
     public function create(string $xuid): void
     {
         $this->data[$xuid] = new CasinoCache($xuid);
