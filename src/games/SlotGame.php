@@ -16,8 +16,6 @@ class SlotGame extends BaseGame
 {
     private SlotData $slotData;
 
-    private array $payLines;
-
     private int $runCount;
 
     public function __construct(Player $player, CasinoMain $plugin, SlotData $slotData)
@@ -25,7 +23,6 @@ class SlotGame extends BaseGame
         parent::__construct($player, $plugin);
 
         $this->slotData = $slotData;
-        $this->payLines = [];
         $this->runCount = 0;
     }
 
@@ -43,16 +40,11 @@ class SlotGame extends BaseGame
                     $contents[] = new ContentToggle("ライン" . $i + 1);
                 }
 
-                new CustomForm($this->player,
+                new CustomForm(CasinoMain::getInstance(),
+                    $this->player,
                 "[Casino] スロット3x3 ペイライン選択",
                 $contents,
                 function (Player $player, array $data): void {
-                    foreach ($data as $key => $line) {
-                        if ($line) {
-                            $this->payLines[] = $key;
-                        }
-                    }
-
                     $this->runSlot();
                 });
                 break;
@@ -61,16 +53,11 @@ class SlotGame extends BaseGame
                 for ($i = 0; $i < 48; $i++) {
                     $contents[] = new ContentToggle("ライン" . $i + 1);
                 }
-                new CustomForm($this->player,
+                new CustomForm(CasinoMain::getInstance(),
+                    $this->player,
                     "[Casino] スロット3x5 ペイライン選択",
                     $contents,
                     function (Player $player, array $data): void {
-                        foreach ($data as $key => $line) {
-                            if ($line) {
-                                $this->payLines[] = $key;
-                            }
-                        }
-
                         $this->runSlot();
                     });
                 break;
@@ -90,7 +77,7 @@ class SlotGame extends BaseGame
         switch ($this->slotData->getType()) {
             case 0:
                 $vertical = 1;
-                $beside = 1;
+                $beside = 3;
                 break;
             case 1:
                 $vertical = 3;
@@ -130,6 +117,7 @@ class SlotGame extends BaseGame
         }
 
         $this->player->sendTitle($slotTitle);
+        $this->plugin->playSoundPlayer($this->player, "random.click");
         if ($this->runCount <= 3) {
             $this->plugin->getScheduler()->scheduleDelayedTask(new ClosureTask(function (): void {
                 call_user_func_array([$this, "runSlot"], []);
@@ -144,6 +132,7 @@ class SlotGame extends BaseGame
     {
         parent::complete();
 
+        $this->plugin->playSoundPlayer($this->player, "random.levelup");
         $this->player->sendMessage("処理終了");
     }
 }

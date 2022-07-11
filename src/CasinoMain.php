@@ -10,6 +10,9 @@ use outiserver\casino\commands\CasinoCommand;
 use outiserver\casino\database\slot\SlotDataManager;
 use outiserver\casino\database\slotconfig\SlotConfigDataManager;
 use Ken_Cir\EconomyCore\EconomyCore;
+use pocketmine\network\mcpe\protocol\PlaySoundPacket;
+use pocketmine\network\mcpe\protocol\types\LevelSoundEvent;
+use pocketmine\player\Player;
 use pocketmine\plugin\PluginBase;
 use pocketmine\utils\Config;
 use pocketmine\utils\SingletonTrait;
@@ -95,6 +98,18 @@ class CasinoMain extends PluginBase
             $this->dataConnector->waitAll();
             $this->dataConnector->close();
         }
+    }
+
+    public function playSoundPlayer(Player $player, string $soundName): void
+    {
+        $pk = new PlaySoundPacket();
+        $pk->soundName = $soundName;
+        $pk->x = $player->getPosition()->getX();
+        $pk->y = $player->getPosition()->getY();
+        $pk->z = $player->getPosition()->getZ();
+        $pk->volume = 1;
+        $pk->pitch = 1;
+        $player->getNetworkSession()->sendDataPacket($pk);
     }
 
     /**

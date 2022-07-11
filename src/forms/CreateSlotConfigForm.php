@@ -16,7 +16,8 @@ class CreateSlotConfigForm implements BaseForm
 {
     public function execute(Player $player): void
     {
-        new CustomForm($player,
+        new CustomForm(CasinoMain::getInstance(),
+            $player,
         "[Casino] スロットマネージャーの作成",
         [
             new ContentInput("マネージャー名", "name")

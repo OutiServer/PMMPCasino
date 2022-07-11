@@ -50,27 +50,29 @@ class CreateSlotForm implements BaseForm
             return;
         }
 
-        new CustomForm(
+        new CustomForm(CasinoMain::getInstance(),
             $player,
         "[Casino] スロットの作成",
         [
             new ContentDropdown("スロットマネージャー", array_map(function (SlotConfigData $slotConfig) {
                 return $slotConfig->getName();
             }, $slotConfigs)),
+            new ContentDropdown("スロットタイプ", ["1x3", "3x3", "3x5"]),
             new ContentInput("スロット名", "slot_name"),
-            new ContentInput("1ラインのベット額", "bet")
+            new ContentInput("1ラインのベット額", "bet", "", true, ContentInput::TYPE_INT)
         ],
         function (Player $player, array $data) use ($slotConfigs): void {
             $plugin = CasinoMain::getInstance();
 
-            if (!$data[1] or !$data[2]) {
+            if (!$data[2] or !$data[3]) {
                 $player->sendMessage("[Casino] " . TextFormat::RED . "スロット名とベット額は入力必須項目です");
                 $player->sendMessage("3秒後前のフォームに戻ります");
                 FormUtil::backForm($plugin, [$this, "execute"], [$player]);
             }
 
-            SlotDataManager::getInstance()->create(1, $slotConfigs[$data[0]]->getId(), $data[1], $this->worldName, $this->x, $this->y, $this->z, (int)$data[2]);
-            $this->sign->setText(new SignText(["[3x3 SLOT] $data[1]", "Bet数: $data[2]"]));
+            SlotDataManager::getInstance()->create($data[1], $slotConfigs[$data[0]]->getId(), $data[2], $this->worldName, $this->x, $this->y, $this->z, (int)$data[3]);
+            $this->sign->setText(new SignText(["[" . ($data[1] === 0 ? "1x3" : ($data[1] === 1 ? "3x3" : "3x5")) . " SLOT] $data[2]", "Bet数: $data[3]"]));
+            $this->sign->getPosition()->getWorld()->setBlock($this->sign->getPosition(), $this->sign);
 
             $player->sendMessage("スロットを作成しました");
         });
