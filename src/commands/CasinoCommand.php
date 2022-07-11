@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Ken_Cir\Casino\Commands;
+namespace outiserver\casino\commands;
 
 use CortexPE\Commando\BaseCommand;
-use Ken_Cir\Casino\Commands\SubCommands\CreateSlotManagerSubCommand;
+use outiserver\casino\commands\subcommands\CreateSlotManagerSubCommand;
 use pocketmine\command\CommandSender;
 use pocketmine\utils\TextFormat;
 

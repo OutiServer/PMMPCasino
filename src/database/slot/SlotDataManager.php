@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Ken_Cir\Casino\Database\Slot;
+namespace outiserver\casino\database\slot;
 
-use Ken_Cir\EconomyCore\Database\Base\BaseAutoincrement;
-use Ken_Cir\EconomyCore\Database\Base\BaseDataManager;
+use Ken_Cir\EconomyCore\database\Base\BaseAutoincrement;
+use Ken_Cir\EconomyCore\database\Base\BaseDataManager;
 use pocketmine\utils\SingletonTrait;
 use poggit\libasynql\DataConnector;
 

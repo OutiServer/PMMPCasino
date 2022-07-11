@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Ken_Cir\Casino;
+namespace outiserver\casino;
 
-use Ken_Cir\Casino\Forms\CreateSlotForm;
-use Ken_Cir\Casino\Games\SlotGame;
+use outiserver\casino\forms\CreateSlotForm;
+use outiserver\casino\games\SlotGame;
 use pocketmine\event\block\SignChangeEvent;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerInteractEvent;

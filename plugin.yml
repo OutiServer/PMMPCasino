@@ -2,7 +2,8 @@ name: EconomyCasino
 description: カジノプラグイン
 version: 1.0.0
 api: 4.0.0
-main: Ken_Cir\Casino\CasinoMain
+main: outiserver\casino\CasinoMain
+src-namespace-prefix: outiserver\casino
 
 loadbefore:
   - EconomyCore

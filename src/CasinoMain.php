@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Ken_Cir\Casino;
+namespace outiserver\casino;
 
 use CortexPE\Commando\PacketHooker;
-use Ken_Cir\Casino\Caches\CasinoCache\CasinoCacheManager;
-use Ken_Cir\Casino\Commands\CasinoCommand;
-use Ken_Cir\Casino\Database\Slot\SlotDataManager;
-use Ken_Cir\Casino\Database\SlotConfig\SlotConfigDataManager;
+use outiserver\casino\caches\casinocache\CasinoCacheManager;
+use outiserver\casino\commands\CasinoCommand;
+use outiserver\casino\database\slot\SlotDataManager;
+use outiserver\casino\database\slotconfig\SlotConfigDataManager;
 use Ken_Cir\EconomyCore\EconomyCore;
 use pocketmine\plugin\PluginBase;
 use pocketmine\utils\Config;
@@ -26,7 +26,7 @@ class CasinoMain extends PluginBase
 
     const CONFIG_VERSION = "1.0.0";
 
-    const DATABASE_VERSION = "1.0.0";
+    const database_VERSION = "1.0.0";
 
     private DataConnector $dataConnector;
 
@@ -63,7 +63,7 @@ class CasinoMain extends PluginBase
         if (@file_exists("{$this->getDataFolder()}database.yml")) {
             $config = new Config("{$this->getDataFolder()}database.yml", Config::YAML);
             // データベース設定のバージョンが違う場合は
-            if ($config->get("version") !== self::DATABASE_VERSION) {
+            if ($config->get("version") !== self::database_VERSION) {
                 rename("{$this->getDataFolder()}database.yml", "{$this->getDataFolder()}database.yml.{$config->get("version")}");
                 $this->getLogger()->warning("database.yml バージョンが違うため、上書きしました");
                 $this->getLogger()->warning("前バージョンのdatabase.ymlは{$this->getDataFolder()}database.yml.{$config->get("version")}にあります");

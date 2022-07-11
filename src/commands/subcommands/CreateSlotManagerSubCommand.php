@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Ken_Cir\Casino\Commands\SubCommands;
+namespace outiserver\casino\commands\subcommands;
 
 use CortexPE\Commando\args\RawStringArgument;
 use CortexPE\Commando\BaseSubCommand;
-use Ken_Cir\Casino\CasinoMain;
-use Ken_Cir\Casino\Forms\CreateSlotConfigForm;
+use outiserver\casino\CasinoMain;
+use outiserver\casino\forms\CreateSlotConfigForm;
 use pocketmine\command\CommandSender;
 use pocketmine\player\Player;
 use pocketmine\utils\TextFormat;

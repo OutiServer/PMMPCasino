@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Ken_Cir\Casino\Games;
+namespace outiserver\casino\games;
 
-use Ken_Cir\Casino\CasinoMain;
+use outiserver\casino\CasinoMain;
 use pocketmine\player\Player;
 
 abstract class BaseGame

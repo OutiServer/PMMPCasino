@@ -1,10 +1,10 @@
 {
-  "name": "ken_cir/casino",
+  "name": "outiserver/casino",
   "description": "PMMPカジノ",
   "license": "MIT",
   "autoload": {
     "psr-4": {
-      "": "src/"
+      "outiserver\\casino\\": "src/"
     }
   },
   "require-dev": {

@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Ken_Cir\Casino\Games;
+namespace outiserver\casino\games;
 
 use InvalidArgumentException;
-use Ken_Cir\Casino\CasinoMain;
-use Ken_Cir\Casino\Database\Slot\SlotData;
+use outiserver\casino\CasinoMain;
+use outiserver\casino\database\slot\SlotData;
 use Ken_Cir\LibFormAPI\FormContents\CustomForm\ContentToggle;
 use Ken_Cir\LibFormAPI\Forms\CustomForm;
 use pocketmine\player\Player;

@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Ken_Cir\Casino\Forms;
+namespace outiserver\casino\forms;
 
-use Ken_Cir\Casino\CasinoMain;
-use Ken_Cir\Casino\Database\Slot\SlotDataManager;
-use Ken_Cir\Casino\Database\SlotConfig\SlotConfigData;
-use Ken_Cir\Casino\Database\SlotConfig\SlotConfigDataManager;
+use outiserver\casino\CasinoMain;
+use outiserver\casino\database\slot\SlotDataManager;
+use outiserver\casino\database\slotconfig\SlotConfigData;
+use outiserver\casino\database\slotconfig\SlotConfigDataManager;
 use Ken_Cir\EconomyCore\Forms\Base\BaseForm;
 use Ken_Cir\LibFormAPI\FormContents\CustomForm\ContentDropdown;
 use Ken_Cir\LibFormAPI\FormContents\CustomForm\ContentInput;

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Ken_Cir\Casino\Database\Slot;
+namespace outiserver\casino\database\slot;
 
-use Ken_Cir\EconomyCore\Database\Base\BaseData;
+use Ken_Cir\EconomyCore\database\Base\BaseData;
 use poggit\libasynql\DataConnector;
 
 class SlotData extends BaseData
