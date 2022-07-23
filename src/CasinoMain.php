@@ -9,7 +9,7 @@ use outiserver\casino\caches\casinocache\CasinoCacheManager;
 use outiserver\casino\commands\CasinoCommand;
 use outiserver\casino\database\slot\SlotDataManager;
 use outiserver\casino\database\slotconfig\SlotConfigDataManager;
-use Ken_Cir\EconomyCore\EconomyCore;
+use outiserver\economycore\EconomyCore;
 use pocketmine\network\mcpe\protocol\PlaySoundPacket;
 use pocketmine\network\mcpe\protocol\types\LevelSoundEvent;
 use pocketmine\player\Player;

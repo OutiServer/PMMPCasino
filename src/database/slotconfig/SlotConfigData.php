@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace outiserver\casino\database\slotconfig;
 
-use Ken_Cir\EconomyCore\database\Base\BaseData;
+use outiserver\economycore\database\Base\BaseData;
 use poggit\libasynql\DataConnector;
 
 class SlotConfigData extends BaseData

@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace outiserver\casino\database\slotconfig;
 
 use outiserver\casino\database\slot\SlotDataManager;
-use Ken_Cir\EconomyCore\database\Base\BaseAutoincrement;
-use Ken_Cir\EconomyCore\database\Base\BaseDataManager;
+use outiserver\economycore\database\Base\BaseAutoincrement;
+use outiserver\economycore\database\Base\BaseDataManager;
 use pocketmine\utils\SingletonTrait;
 use poggit\libasynql\DataConnector;
 

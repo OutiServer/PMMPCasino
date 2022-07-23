@@ -6,11 +6,13 @@ namespace outiserver\casino;
 
 use outiserver\casino\forms\CreateSlotForm;
 use outiserver\casino\games\SlotGame;
+use pocketmine\event\block\BlockBreakEvent;
 use pocketmine\event\block\SignChangeEvent;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerInteractEvent;
 use pocketmine\event\player\PlayerJoinEvent;
 use pocketmine\event\player\PlayerQuitEvent;
+use pocketmine\utils\TextFormat;
 
 class EventHandler implements Listener
 {
@@ -57,5 +59,21 @@ class EventHandler implements Listener
         if ($signText->getLine(0) === "slot") {
             (new CreateSlotForm($block->getPosition()->getWorld()->getFolderName(), $block->getPosition()->getFloorX(), $block->getPosition()->getFloorY(), $block->getPosition()->getFloorZ(), $sign))->execute($player);
         }
+    }
+
+    public function onBlockBreak(BlockBreakEvent $event): void
+    {
+        $player = $event->getPlayer();
+        $block = $event->getBlock();
+        $slot = $this->plugin->getSlotDataManager()->getPos($block->getPosition()->getWorld()->getFolderName(), $block->getPosition()->getFloorX(), $block->getPosition()->getFloorY(), $block->getPosition()->getFloorZ());
+
+        if (!$slot) return;
+        elseif (!$this->plugin->getServer()->isOp($player->getName())) {
+            $event->cancel();
+            return;
+        }
+
+        $this->plugin->getSlotDataManager()->delete($slot->getId());
+        $player->sendMessage("[Casino] " . TextFormat::GREEN . "スロットを削除しました");
     }
 }

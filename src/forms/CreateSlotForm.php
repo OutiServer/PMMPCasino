@@ -8,7 +8,7 @@ use outiserver\casino\CasinoMain;
 use outiserver\casino\database\slot\SlotDataManager;
 use outiserver\casino\database\slotconfig\SlotConfigData;
 use outiserver\casino\database\slotconfig\SlotConfigDataManager;
-use Ken_Cir\EconomyCore\Forms\Base\BaseForm;
+use outiserver\economycore\Forms\Base\BaseForm;
 use Ken_Cir\LibFormAPI\FormContents\CustomForm\ContentDropdown;
 use Ken_Cir\LibFormAPI\FormContents\CustomForm\ContentInput;
 use Ken_Cir\LibFormAPI\Forms\CustomForm;

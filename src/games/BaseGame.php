@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace outiserver\casino\games;
 
+use outiserver\economycore\Database\Economy\EconomyData;
+use outiserver\economycore\Database\Economy\EconomyDataManager;
 use outiserver\casino\CasinoMain;
 use pocketmine\player\Player;
 
@@ -13,10 +15,13 @@ abstract class BaseGame
 
     protected CasinoMain $plugin;
 
+    protected EconomyData $economyData;
+
     public function __construct(Player $player, CasinoMain $plugin)
     {
         $this->player = $player;
         $this->plugin = $plugin;
+        $this->economyData = EconomyDataManager::getInstance()->get($player->getXuid());
     }
 
     /**

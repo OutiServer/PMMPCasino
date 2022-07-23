@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace outiserver\casino\forms;
 
 use outiserver\casino\CasinoMain;
-use Ken_Cir\EconomyCore\Forms\Base\BaseForm;
+use outiserver\economycore\Forms\Base\BaseForm;
 use Ken_Cir\LibFormAPI\FormContents\CustomForm\ContentInput;
 use Ken_Cir\LibFormAPI\Forms\CustomForm;
 use Ken_Cir\LibFormAPI\Utils\FormUtil;

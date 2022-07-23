@@ -5,12 +5,15 @@ declare(strict_types=1);
 namespace outiserver\casino\games;
 
 use InvalidArgumentException;
+use outiserver\economycore\Database\Economy\EconomyData;
+use outiserver\economycore\EconomyCore;
 use outiserver\casino\CasinoMain;
 use outiserver\casino\database\slot\SlotData;
 use Ken_Cir\LibFormAPI\FormContents\CustomForm\ContentToggle;
 use Ken_Cir\LibFormAPI\Forms\CustomForm;
 use pocketmine\player\Player;
 use pocketmine\scheduler\ClosureTask;
+use pocketmine\utils\TextFormat;
 
 class SlotGame extends BaseGame
 {
@@ -18,12 +21,24 @@ class SlotGame extends BaseGame
 
     private int $runCount;
 
+    private array $result;
+
+    private int $slotX;
+
+    private int $slotY;
+
+    private array $payLines;
+
     public function __construct(Player $player, CasinoMain $plugin, SlotData $slotData)
     {
         parent::__construct($player, $plugin);
 
         $this->slotData = $slotData;
         $this->runCount = 0;
+        $this->result = [];
+        $this->slotX = 0;
+        $this->slotY = 0;
+        $this->payLines = [];
     }
 
     public function run(): void
@@ -32,6 +47,12 @@ class SlotGame extends BaseGame
 
         switch ($this->slotData->getType()) {
             case 0:
+                if ($this->economyData->getMoney() < $this->slotData->getBet()) {
+                    $this->player->sendMessage("[Casino] " . TextFormat::RED . " スロットを回すお金があと" . $this->slotData->getBet() - $this->economyData->getMoney() . "円足りません");
+                    return;
+                }
+
+                $this->payLines = [0];
                 $this->runSlot();
                 break;
             case 1:
@@ -45,6 +66,15 @@ class SlotGame extends BaseGame
                 "[Casino] スロット3x3 ペイライン選択",
                 $contents,
                 function (Player $player, array $data): void {
+                    foreach ($data as $key => $_) {
+                        if ($_) $this->payLines[] = $key;
+                    }
+
+                    if ($this->economyData->getMoney() < ($this->slotData->getBet() * count($this->payLines))) {
+                        $this->player->sendMessage("[Casino] " . TextFormat::RED . " スロットを回すお金があと" .  ($this->slotData->getBet() * count($this->payLines)) - $this->economyData->getMoney() . "円足りません");
+                        return;
+                    }
+
                     $this->runSlot();
                 });
                 break;
@@ -58,6 +88,15 @@ class SlotGame extends BaseGame
                     "[Casino] スロット3x5 ペイライン選択",
                     $contents,
                     function (Player $player, array $data): void {
+                        foreach ($data as $key => $_) {
+                            if ($_) $this->payLines[] = $key;
+                        }
+
+                        if ($this->economyData->getMoney() < ($this->slotData->getBet() * count($this->payLines))) {
+                            $this->player->sendMessage("[Casino] " . TextFormat::RED . " スロットを回すお金があと" .  ($this->slotData->getBet() * count($this->payLines)) - $this->economyData->getMoney() . "円足りません");
+                            return;
+                        }
+
                         $this->runSlot();
                     });
                 break;
@@ -71,21 +110,19 @@ class SlotGame extends BaseGame
         $this->runCount++;
 
         $slotTitle = "";
-        $vertical = 0;
-        $beside = 0;
 
         switch ($this->slotData->getType()) {
             case 0:
-                $vertical = 1;
-                $beside = 3;
+                $this->slotX = 1;
+                $this->slotY = 3;
                 break;
             case 1:
-                $vertical = 3;
-                $beside = 3;
+                $this->slotX = 3;
+                $this->slotY = 3;
                 break;
             case 2:
-                $vertical = 3;
-                $beside = 5;
+                $this->slotX = 3;
+                $this->slotY = 5;
                 break;
             default:
                 throw new InvalidArgumentException("Unknown slot type {$this->slotData->getType()}");
@@ -93,32 +130,36 @@ class SlotGame extends BaseGame
 
         // 初回
         if ($this->runCount <= 1) {
-            for ($i = 0; $i < $vertical; $i++) {
+            for ($i = 0; $i < $this->slotX; $i++) {
                 if ($i < 1) $slotTitle .= "§f";
                 else $slotTitle .= "\n§f";
 
-                for ($y = 0; $y < $beside; $y++) {
+                for ($y = 0; $y < $this->slotY; $y++) {
                     if ($y < 1) $slotTitle .= "[§e?§f]";
                     else $slotTitle .= "-[§e?§f]";
                 }
             }
         }
         else {
-            for ($i = 0; $i < $vertical; $i++) {
+            for ($i = 0; $i < $this->slotX; $i++) {
+                if (!isset($this->result[$i])) $this->result[$i] = [];
                 if ($i < 1) $slotTitle .= "§f";
                 else $slotTitle .= "\n§f";
 
-                for ($y = 0; $y < $beside; $y++) {
-                    $rand = rand(0, 9);
-                    if ($y < 1) $slotTitle .= "[§e{$rand}§f]";
-                    else $slotTitle .= "-[§e{$rand}§f]";
+                $rand = rand(0, 9);
+                for ($y = 0; $y < $this->slotY; $y++) {
+                    if (!isset($this->result[$i][$y]) and $y < ($this->runCount - 1)) $this->result[$i][$y] = $rand;
+
+                    if ($y < 1) $slotTitle .= "[§e{$this->result[$i][$y]}§f]";
+                    elseif ($y < ($this->runCount - 1)) $slotTitle .= "-[§e{$this->result[$i][$y]}§f]";
+                    else $slotTitle .= "-[§e?§f]";
                 }
             }
         }
 
         $this->player->sendTitle($slotTitle);
         $this->plugin->playSoundPlayer($this->player, "random.click");
-        if ($this->runCount <= 3) {
+        if ($this->runCount <= $this->slotY) {
             $this->plugin->getScheduler()->scheduleDelayedTask(new ClosureTask(function (): void {
                 call_user_func_array([$this, "runSlot"], []);
             }), 30);

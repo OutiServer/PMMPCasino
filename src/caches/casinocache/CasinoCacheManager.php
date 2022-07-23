@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace outiserver\casino\caches\casinocache;
 
-use Ken_Cir\EconomyCore\caches\Base\BaseCacheManager;
+use outiserver\economycore\caches\Base\BaseCacheManager;
 
 class CasinoCacheManager extends BaseCacheManager
 {
