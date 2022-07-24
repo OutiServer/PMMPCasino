@@ -56,7 +56,7 @@ class EventHandler implements Listener
         $signText = $event->getNewText();
         $sign = $event->getSign();
 
-        if ($signText->getLine(0) === "slot") {
+        if ($signText->getLine(0) === "slot" and $this->plugin->getServer()->isOp($player->getName())) {
             (new CreateSlotForm($block->getPosition()->getWorld()->getFolderName(), $block->getPosition()->getFloorX(), $block->getPosition()->getFloorY(), $block->getPosition()->getFloorZ(), $sign))->execute($player);
         }
     }
