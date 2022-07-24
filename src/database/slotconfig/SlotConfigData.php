@@ -109,6 +109,18 @@ class SlotConfigData extends BaseData
         $this->update();
     }
 
+    public function addJp(int $jp): void
+    {
+        $this->jp += $jp;
+        $this->update();
+    }
+
+    public function removeJp(int $jp): void
+    {
+        $this->jp -= $jp;
+        $this->update();
+    }
+
     /**
      * @return string
      */
