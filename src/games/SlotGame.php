@@ -12,10 +12,12 @@ use outiserver\casino\CasinoMain;
 use outiserver\casino\database\slot\SlotData;
 use Ken_Cir\LibFormAPI\FormContents\CustomForm\ContentToggle;
 use Ken_Cir\LibFormAPI\Forms\CustomForm;
+use pocketmine\color\Color;
 use pocketmine\player\Player;
 use pocketmine\scheduler\ClosureTask;
 use pocketmine\utils\Random;
 use pocketmine\utils\TextFormat;
+use pocketmine\world\particle\PotionSplashParticle;
 
 class SlotGame extends BaseGame
 {
@@ -44,6 +46,23 @@ class SlotGame extends BaseGame
         $this->slotX = 0;
         $this->slotY = 0;
         $this->payLines = [];
+
+        switch ($this->slotData->getType()) {
+            case 0:
+                $this->slotX = 1;
+                $this->slotY = 3;
+                break;
+            case 1:
+                $this->slotX = 3;
+                $this->slotY = 3;
+                break;
+            case 2:
+                $this->slotX = 3;
+                $this->slotY = 5;
+                break;
+            default:
+                throw new InvalidArgumentException("Unknown slot type {$this->slotData->getType()}");
+        }
     }
 
     public function run(): void
@@ -81,10 +100,18 @@ class SlotGame extends BaseGame
                         return;
                     }
 
+                    $this->economyData->removeMoney(($this->slotData->getBet() * count($this->payLines)));
                     $this->runSlot();
+                },
+                function () {
+                    $this->plugin->getCasinoCacheManager()->get($this->player->getXuid())->setCasinoRunning(false);
                 });
                 break;
             case 2:
+                $this->player->sendMessage("[Casino] " . TextFormat::YELLOW . "申し訳ありません、3x8スロットは現在準備中です");
+                $this->plugin->getCasinoCacheManager()->get($this->player->getXuid())->setCasinoRunning(false);
+                return;
+
                 $contents = [];
                 for ($i = 0; $i < 48; $i++) {
                     $contents[] = new ContentToggle("ライン" . $i + 1);
@@ -104,6 +131,9 @@ class SlotGame extends BaseGame
                         }
 
                         $this->runSlot();
+                    },
+                    function () {
+                        $this->plugin->getCasinoCacheManager()->get($this->player->getXuid())->setCasinoRunning(false);
                     });
                 break;
             default:
@@ -116,23 +146,6 @@ class SlotGame extends BaseGame
         $this->runCount++;
 
         $slotTitle = "";
-
-        switch ($this->slotData->getType()) {
-            case 0:
-                $this->slotX = 1;
-                $this->slotY = 3;
-                break;
-            case 1:
-                $this->slotX = 3;
-                $this->slotY = 3;
-                break;
-            case 2:
-                $this->slotX = 3;
-                $this->slotY = 5;
-                break;
-            default:
-                throw new InvalidArgumentException("Unknown slot type {$this->slotData->getType()}");
-        }
 
         // 初回
         if ($this->runCount <= 1) {
@@ -152,8 +165,7 @@ class SlotGame extends BaseGame
                 if ($i < 1) $slotTitle .= "§f";
                 else $slotTitle .= "\n§f";
 
-                #$rand = rand(0, 9);
-                $rand = 6;
+                $rand = rand(0, 9);
                 for ($y = 0; $y < $this->slotY; $y++) {
                     if (!isset($this->result[$i][$y]) and $y < ($this->runCount - 1)) $this->result[$i][$y] = $rand;
 
@@ -189,6 +201,34 @@ class SlotGame extends BaseGame
                 else $winLines++;
             }
         }
+        // 3x3
+        elseif ($this->slotX === 3 and $this->slotY === 3) {
+            // 横あわせ確認
+            for ($i = 0; $i < 3; $i++) {
+                if ($this->result[$i][0] === $this->result[$i][1] and $this->result[$i][0] === $this->result[$i][2] and in_array($i, $this->payLines, true)) {
+                    if ($this->result[$i][0] === 7 and !$jp) $jp = true;
+                    else $winLines++;
+                }
+            }
+
+            // 縦あわせ確認
+            for ($i = 0; $i < 3; $i++) {
+                if ($this->result[0][$i] === $this->result[1][$i] and $this->result[0][$i] === $this->result[2][$i] and in_array(($i + 3), $this->payLines, true)) {
+                    if ($this->result[0][$i] === 7 and !$jp) $jp = true;
+                    else $winLines++;
+                }
+            }
+
+            // 斜め
+            if ($this->result[0][0] === $this->result[1][1] and $this->result[0][0] === $this->result[2][2] and in_array(6, $this->payLines, true)) {
+                if ($this->result[0][0] === 7 and !$jp) $jp = true;
+                else $winLines++;
+            }
+            if ($this->result[0][2] === $this->result[1][1] and $this->result[0][2] === $this->result[2][0] and in_array(7, $this->payLines, true)) {
+                if ($this->result[0][0] === 7 and !$jp) $jp = true;
+                else $winLines++;
+            }
+        }
 
         // JP以外の当たりのみ
         if ($winLines > 0 and !$jp) {
@@ -214,17 +254,23 @@ class SlotGame extends BaseGame
             $this->plugin->getServer()->broadcastMessage("[Casino] [{$this->slotConfigData->getName()}]" . TextFormat::GREEN . "{$this->player->getName()}さんがJPを当て、" . ($this->slotConfigData->getJp()) . "円獲得しました、おめでとうございます！");
             $this->plugin->playSoundPlayer($this->player, "raid.horn");
             $this->economyData->addMoney($this->slotConfigData->getJp());
-
-            $random = new Random((int) (microtime(true) * 1000) + mt_rand());
             $pos = $this->player->getPosition();
-            for($i = 0; $i < 100; ++$i){
-                $pos = $pos->add(
-                    $random->nextSignedFloat() * 5,
-                    $random->nextSignedFloat() * 5,
-                    $random->nextSignedFloat() * 5
-                );
-                $this->player->getWorld()->addParticle($pos, new DragonBreathParticle());
-                $this->player->getWorld()->addParticle($pos, new ExplosionEmitterParticle());
+            $random = new Random((int) (microtime(true) * 1000) + mt_rand());
+            for ($y = 0; $y < 5; $y++) {
+                $r = rand(0, 255);
+                $g = rand(0, 255);
+                $b = rand(0, 255);
+
+                for($i = 0; $i < 10; ++$i){
+                    $pos = $pos->add(
+                        $random->nextSignedFloat(),
+                        $random->nextSignedFloat(),
+                        $random->nextSignedFloat()
+                    );
+
+                    $this->player->getWorld()->addParticle($pos, new PotionSplashParticle(new Color($r, $g, $b)));
+                }
+
             }
 
             $this->slotConfigData->setLatestJP($this->slotConfigData->getJp());
