@@ -2,3 +2,6 @@ version: 1.0.0
 
 # ジャックポットの初期額
 default_slot_jp: 10000
+
+# スロットが当たった時の1ライン当たりの配当倍数(賭けた金 x 配当)
+reduction_rate: 10
