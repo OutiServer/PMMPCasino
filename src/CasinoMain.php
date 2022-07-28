@@ -7,6 +7,7 @@ namespace outiserver\casino;
 use CortexPE\Commando\PacketHooker;
 use outiserver\casino\caches\casinocache\CasinoCacheManager;
 use outiserver\casino\commands\CasinoCommand;
+use outiserver\casino\database\gacha\GachaDataManager;
 use outiserver\casino\database\slot\SlotDataManager;
 use outiserver\casino\database\slotconfig\SlotConfigDataManager;
 use outiserver\economycore\EconomyCore;
@@ -36,6 +37,8 @@ class CasinoMain extends PluginBase
     private SlotConfigDataManager $slotConfigDataManager;
 
     private SlotDataManager $slotDataManager;
+
+    private GachaDataManager $gachaDataManager;
 
     private CasinoCacheManager $casinoCacheManager;
 
@@ -79,9 +82,12 @@ class CasinoMain extends PluginBase
         ]);
         $this->dataConnector->executeGeneric("economy.casino.slot_configs.init");
         $this->dataConnector->executeGeneric("economy.casino.slots.init");
+        $this->dataConnector->executeGeneric("economy.casino.gachas.init");
+        $this->dataConnector->executeGeneric("economy.casino.gacha_items.init");
         $this->dataConnector->waitAll();
         $this->slotConfigDataManager = new SlotConfigDataManager($this->dataConnector);
         $this->slotDataManager = new SlotDataManager($this->dataConnector);
+        $this->gachaDataManager = new GachaDataManager($this->dataConnector);
         $this->casinoCacheManager = new CasinoCacheManager();
 
         if(!PacketHooker::isRegistered()) {
@@ -134,6 +140,14 @@ class CasinoMain extends PluginBase
     public function getSlotDataManager(): SlotDataManager
     {
         return $this->slotDataManager;
+    }
+
+    /**
+     * @return GachaDataManager
+     */
+    public function getGachaDataManager(): GachaDataManager
+    {
+        return $this->gachaDataManager;
     }
 
     /**

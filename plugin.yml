@@ -15,3 +15,9 @@ permissions:
   casino.createslotmanager.command:
     description: CreateSlotManager Command Permission
     default: op
+  casino.creategacha.command:
+    description: CreateGacha Command Permission
+    default: op
+  casino.editgachaitem.command:
+    description: EditGachaItem Command Permission
+    default: op
