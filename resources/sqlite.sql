@@ -191,6 +191,7 @@ CREATE TABLE IF NOT EXISTS gacha_items
 -- #    :item_id int
 -- #    :item_meta int
 -- #    :rand int
+-- #    :count int
 INSERT INTO gacha_items (gacha_id, item_id, item_meta, rand, count)
 VALUES (:gacha_id, :item_id, :item_meta, :rand, :count);
 -- # }

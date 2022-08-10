@@ -49,6 +49,13 @@ class GachaItemData extends BaseData
     public function __construct(DataConnector $dataConnector, int $id, int $gachaId, int $itemId, int $itemMeta, int $rand, int $count)
     {
         parent::__construct($dataConnector);
+
+        $this->id = $id;
+        $this->gachaId = $gachaId;
+        $this->itemId = $itemId;
+        $this->itemMeta = $itemMeta;
+        $this->rand = $rand;
+        $this->count = $count;
     }
 
     protected function update(): void

@@ -5,12 +5,16 @@ declare(strict_types=1);
 namespace outiserver\casino;
 
 use CortexPE\Commando\PacketHooker;
+use Ken_Cir\LibFormAPI\FormStack\StackFormManager;
 use outiserver\casino\caches\casinocache\CasinoCacheManager;
 use outiserver\casino\commands\CasinoCommand;
 use outiserver\casino\database\gacha\GachaDataManager;
+use outiserver\casino\database\gachaitem\GachaItemDataManager;
 use outiserver\casino\database\slot\SlotDataManager;
 use outiserver\casino\database\slotconfig\SlotConfigDataManager;
 use outiserver\economycore\EconomyCore;
+use pocketmine\item\ItemIds;
+use pocketmine\item\VanillaItems;
 use pocketmine\network\mcpe\protocol\PlaySoundPacket;
 use pocketmine\network\mcpe\protocol\types\LevelSoundEvent;
 use pocketmine\player\Player;
@@ -40,7 +44,11 @@ class CasinoMain extends PluginBase
 
     private GachaDataManager $gachaDataManager;
 
+    private GachaItemDataManager $gachaItemDataManager;
+
     private CasinoCacheManager $casinoCacheManager;
+
+    private StackFormManager $stackFormManager;
 
     protected function onLoad(): void
     {
@@ -88,7 +96,9 @@ class CasinoMain extends PluginBase
         $this->slotConfigDataManager = new SlotConfigDataManager($this->dataConnector);
         $this->slotDataManager = new SlotDataManager($this->dataConnector);
         $this->gachaDataManager = new GachaDataManager($this->dataConnector);
+        $this->gachaItemDataManager = new GachaItemDataManager($this->dataConnector);
         $this->casinoCacheManager = new CasinoCacheManager();
+        $this->stackFormManager = new StackFormManager();
 
         if(!PacketHooker::isRegistered()) {
             PacketHooker::register($this);
@@ -156,5 +166,13 @@ class CasinoMain extends PluginBase
     public function getCasinoCacheManager(): CasinoCacheManager
     {
         return $this->casinoCacheManager;
+    }
+
+    /**
+     * @return StackFormManager
+     */
+    public function getStackFormManager(): StackFormManager
+    {
+        return $this->stackFormManager;
     }
 }

@@ -7,6 +7,8 @@ namespace outiserver\casino\commands\subcommands;
 use CortexPE\Commando\args\IntegerArgument;
 use CortexPE\Commando\args\RawStringArgument;
 use CortexPE\Commando\BaseSubCommand;
+use outiserver\casino\forms\CreateSlotConfigForm;
+use outiserver\casino\forms\EditGachaItemForm;
 use pocketmine\command\CommandSender;
 use pocketmine\item\Item;
 use pocketmine\item\ItemFactory;
@@ -15,32 +17,20 @@ use pocketmine\item\LegacyStringToItemParser;
 use pocketmine\item\LegacyStringToItemParserException;
 use pocketmine\item\StringToItemParser;
 use pocketmine\item\VanillaItems;
+use pocketmine\player\Player;
+use pocketmine\utils\TextFormat;
 
 class EditGachaItemSubCommand extends BaseSubCommand
 {
     protected function prepare(): void
     {
         $this->setPermission("casino.editgachaitem.command");
-        $this->registerArgument(0, new RawStringArgument("gachaName", true));
-        $this->registerArgument(1, new IntegerArgument("itemId", true));
-        $this->registerArgument(3, new IntegerArgument("rand", true));
-        $this->registerArgument(4, new IntegerArgument("count", true));
     }
 
     public function onRun(CommandSender $sender, string $aliasUsed, array $args): void
     {
-        if (isset($args["gachaName"]) and isset($args["itemId"]) and isset($args["rand"]) and isset($args["count"])) {
-            try{
-                $item = StringToItemParser::getInstance()->parse($args["itemId"]);
-            }
-            catch(LegacyStringToItemParserException){
-                $sender->sendMessage("[Casino] " . "不明なアイテムID $args[0]");
-                return;
-            }
-
-            if ($args["count"] < 1) {
-                $sender->sendMessage("");
-            }
+        if ($sender instanceof Player) {
+            (new EditGachaItemForm())->execute($sender);
         }
     }
 }

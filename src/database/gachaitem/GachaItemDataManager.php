@@ -59,13 +59,17 @@ class GachaItemDataManager extends BaseDataManager
 
     /**
      * @param int $id
-     * @return GachaItemData[]
+     * @param bool $keyValue
+     * @return GachaItemData
      */
-    public function getGachaId(int $id): array
+    public function getGachaId(int $id, bool $keyValue): array
     {
-        return array_filter($this->data, function (GachaItemData $gachaItemData) use ($id) {
+        $data = array_filter($this->data, function (GachaItemData $gachaItemData) use ($id) {
             return $id === $gachaItemData->getGachaId();
         });
+
+        if ($keyValue) return array_values($data);
+        return $data;
     }
 
     public function create(int $gachaId, int $itemId, int $itemMeta, int $rand, int $count): GachaItemData

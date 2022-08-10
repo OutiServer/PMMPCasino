@@ -12,6 +12,7 @@ use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerInteractEvent;
 use pocketmine\event\player\PlayerJoinEvent;
 use pocketmine\event\player\PlayerQuitEvent;
+use pocketmine\lang\Translatable;
 use pocketmine\utils\TextFormat;
 
 class EventHandler implements Listener
@@ -26,6 +27,8 @@ class EventHandler implements Listener
     public function onPlayerJoin(PlayerJoinEvent $event): void
     {
         $player = $event->getPlayer();
+
+        $player->sendMessage("%minecraft:deepslate_iron_ore");
 
         $this->plugin->getCasinoCacheManager()->create($player->getXuid());
     }
